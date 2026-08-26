@@ -20,7 +20,7 @@ import numpy as np
 from sentence_transformers import SentenceTransformer
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "..", "data", "history.db")
-SIMILARITY_THRESHOLD = 0.92  # cosine similarity above this = "same fact, reworded"
+SIMILARITY_THRESHOLD = 0.80  # cosine similarity above this = "same fact, reworded"
 
 _embedder = None
 
@@ -33,7 +33,14 @@ def get_embedder():
 
 
 def _get_conn():
-    conn = sqlite3.connect(DB_PATH)
+    # Streamlit Cloud clones the repo fresh each time, and data/ is
+    # gitignored (correctly, so local DBs/API keys never get committed) —
+    # so the folder doesn't exist yet on first run. sqlite3.connect() fails
+    # if its parent directory is missing, so create it first.
+    db_dir = os.path.dirname(DB_PATH)
+    if db_dir:
+        os.makedirs(db_dir, exist_ok=True)
+    conn = sqlite3.connect(DB_PATH, check_same_thread=False)
     conn.execute(
         """
         CREATE TABLE IF NOT EXISTS generated_items (
