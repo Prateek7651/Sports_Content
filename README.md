@@ -1,4 +1,4 @@
-# AI-Powered Sports Engagement Content Agent (v7)
+# AI-Powered Sports Engagement Content Agent 
 
 Generates 5 types of Instagram-ready sports content — MCQ, True/False, This-or-That
 polls, Fill-in-the-Blank, and Guess-the-Number — grounded in web search (fresh facts)
